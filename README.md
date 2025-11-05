@@ -36,35 +36,17 @@ This project extends that framework by introducing:
 
 The adjusted optimization objective is defined as:
 
-\[
-\text{Objective} = \text{VaR}(w, \Sigma, z) + 
-\lambda_1 \cdot C(w) +
-\lambda_2 \cdot E(w) +
-\lambda_3 \cdot L(t)
-\]
+$$
+\text{Objective} = \text{VaR}(w, \Sigma, z) + \lambda_1 \cdot C(w) + \lambda_2 \cdot E(w) + \lambda_3 \cdot L(t)
+$$
 
 Where:
 
-\[
-\text{VaR}(w, \Sigma, z) = z \sqrt{w^T \Sigma w}
-\]
+- $$\text{VaR}(w, \Sigma, z) = z \sqrt{w^T \Sigma w}$$
+- $$C(w) = \sum_i |w_i| c_i \quad \text{(transaction cost penalty)}$$
+- $$E(w) = \sum_i |e_i| \quad \text{(exposure penalty)}$$
+- $$L(t) \quad \text{is a latency penalty applied if runtime exceeds 10ms}$$
+- $$\lambda_1, \lambda_2, \lambda_3 \quad \text{are regularization coefficients controlling penalty weights}$$
 
-\[
-C(w) = \sum_i |w_i| c_i \quad \text{(transaction cost penalty)}
-\]
-
-\[
-E(w) = \sum_i |e_i| \quad \text{(exposure penalty)}
-\]
-
-\[
-L(t) \quad \text{is a latency penalty applied if runtime exceeds 10ms}
-\]
-
-\[
-\lambda_1, \lambda_2, \lambda_3 \quad \text{are regularization coefficients controlling penalty weights}
-\]
-
----
 
 
