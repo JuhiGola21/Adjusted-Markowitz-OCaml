@@ -1,53 +1,56 @@
+# 📈 Adjusted Markowitz Portfolio Model in OCaml
 
+This project implements an **enhanced Markowitz Portfolio Optimization** framework in **OCaml**, integrating realistic trading constraints such as **transaction costs**, **exposure limits**, **latency penalties**, and **spot price consistency checks**.  
 
-# Adjusted Markowitz Portfolio Optimisation in OCaml  
-### Risk Management | Latency Measurement | Spot-Check Consistency
-
-This project implements an **adjusted Markowitz portfolio optimisation algorithm** in **OCaml**, extended to reflect practical risk-management elements used in trading environments.  
-
-It models how a trader or risk manager can minimise **Value at Risk (VaR)** while also controlling **transaction costs**, **portfolio exposure**, **latency**, and **data consistency** across multiple market sources.
+It blends classical portfolio theory with practical risk management considerations, simulating how optimization behaves under real-world trading conditions.
 
 ---
 
-## 🔍 Concept Overview
+## 🧮 Overview
 
-Traditional **Markowitz portfolio theory** focuses on balancing expected return and variance (risk).  
-This project adjusts that framework to include **realistic trading constraints**:
+The traditional Markowitz model optimizes portfolios based solely on **expected return** and **variance**.  
+This project extends that framework by introducing:
 
-| Component | Meaning | Modelled By |
-|------------|----------|-------------|
-| **VaR (Value at Risk)** | Measures downside risk of portfolio | `value_at_risk` |
-| **Transaction Costs** | Penalises frequent or large trades | `transaction_penalty` |
-| **Exposure Control** | Encourages netting (offsetting) currency pairs | `exposure_penalty` |
-| **Latency Penalty** | Simulates technological optimisation—penalises slow computations | `latency_penalty` |
-| **Spot-Check Consistency** | Ensures data reliability before optimisation | `spot_check_consistency` |
-
-The resulting model better represents a **real trading environment**, where both financial and technological performance matter.
+1. **Transaction Cost Penalty** — discourages high-turnover portfolios.  
+2. **Exposure Penalty** — limits directional or sectoral concentration.  
+3. **Latency Penalty** — accounts for the time cost of computation.  
+4. **Spot Price Consistency Check** — ensures market data integrity before optimization.
 
 ---
 
-## ⚙️ Core Formula
+## ⚙️ Features
 
-The adjusted objective function is:
+| Component | Description |
+|------------|-------------|
+| **Portfolio Variance** | Computes variance using covariance matrices. |
+| **Value-at-Risk (VaR)** | Estimates downside risk given a confidence level. |
+| **Transaction Penalty** | Penalizes weights with high transaction costs. |
+| **Exposure Penalty** | Penalizes large absolute exposures. |
+| **Latency Measurement** | Measures computation time to simulate execution latency. |
+| **Spot Check Consistency** | Validates that all spot data sources are within tolerance. |
+| **Adjusted Objective** | Combines all penalties and VaR into one objective score. |
+
+---
+
+## 🧠 Mathematical Formulation
+
+The adjusted optimization objective is defined as:
 
 \[
-\text{Objective} = \text{VaR} + \lambda_1(\text{Transaction Cost}) + \lambda_2(\text{Exposure}) + \lambda_3(\text{Latency})
+\text{Objective} = \text{VaR}(w, \Sigma, z) + 
+\lambda_1 \cdot C(w) +
+\lambda_2 \cdot E(w) +
+\lambda_3 \cdot L(t)
 \]
 
-Where:
-- \( \lambda_1, \lambda_2, \lambda_3 \) are weighting parameters controlling the importance of each penalty term.
-
-The goal is to **minimise** this objective.
+Where:  
+- \( \text{VaR}(w, \Sigma, z) = z \sqrt{w^T \Sigma w} \)  
+- \( C(w) = \sum_i |w_i| c_i \) — transaction cost penalty  
+- \( E(w) = \sum_i |e_i| \) — exposure penalty  
+- \( L(t) \) — latency penalty if runtime exceeds 10ms  
+- \( \lambda_1, \lambda_2, \lambda_3 \) — regularization coefficients controlling penalty weights  
 
 ---
 
-## 🧠 How It Works
+## 🧰 Code Structure
 
-### 1️⃣ Portfolio Representation
-```ocaml
-type portfolio = {
-  weights : float list;
-  cov_matrix : float array array;
-  trans_costs : float list;
-  exposures : float list;
-}
